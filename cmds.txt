@@ -1,0 +1,15 @@
+1) In my experience Fedora Media Writer works best in contrast to Etcher and Rufus being availble during 2022. 
+2) ZFS is by the best file system and it is open source. 
+3) Linux was built with freedom in mind and that freedom lincense today makes it hard for us users to get the full customized experience. 
+4) So, today we will be building a linux fedora on with 2 desktop system i3 and gnome. 
+6) i3 will be a learning curve for anyone out there if you are new to it but its very efficient. Apparently sway is supporting tiny amount of better screen space allocation
+algorithm. However it does not have nvdia support.
+7) I writing as I am making the live usb. I kid you not its taking a bit on my slow computer :D :'(
+__________________________________________________________________________________________________________________________________________________
+Now we have a Fedora 36 live usb stick which is actually very cutting edge with new implementaitons.
+We will now attempt to take kernel apart and incorporate ZFS file system
+
+ Open Terminal
+ ___________________-
+ sudo su -
+ 
