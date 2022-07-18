@@ -12,4 +12,41 @@ We will now attempt to take kernel apart and incorporate ZFS file system
  Open Terminal
  ___________________-
  sudo su -
- 
+ source /etc/os-release
+ dnf remove -y zfs-fuse
+ setenforce 0
+ dnf install -y https://dl.fedoraproject.org/pub/fedora/linux/releases/${VERSION_ID}/Everything/x86_64/os/Packages/k/kernel-devel-$(uname -r).rpm
+ dnf install -y https://zfsonlinux.org/fedora/zfs-release.fc${VERSION_ID}.noarch.rpm
+dnf install -y zfs
+modprobe zfs
+dnf install -y arch-install-scripts gdisk dosfstools
+ls /dev/disk/by-id/*
+DISK=/dev/disk/by-id/NAME-OF-Your-Hardisk
+INST_FEDORA_VER=${VERSION_ID}
+INST_UUID=$(dd if=/dev/urandom bs=1 count=100 2>/dev/null | tr -dc 'a-z0-9' | cut -c-6)
+INST_ID=fedora
+sgdisk --zap-all "$DISK"
+blkdiscard -f "$DISK"
+sgdisk --zap-all "$DISK"
+INST_PARTSIZE_EFI=600 \
+INST_PARTSIZE_BOOT=2  \
+INST_PARTSIZE_SWAP=8  \
+INST_PARTSIZE_RPOOL= 
+for i in ${DISK}; do
+sgdisk --zap-all $i
+sgdisk -n1:1M:+${INST_PARTSIZE_ESP}G -t1:EF00 $i
+sgdisk -n2:0:+${INST_PARTSIZE_BPOOL}G -t2:BE00 $i
+if [ "${INST_PARTSIZE_SWAP}" != "" ]; then
+    sgdisk -n4:0:+${INST_PARTSIZE_SWAP}G -t4:8200 $i
+fi
+if [ "${INST_PARTSIZE_RPOOL}" = "" ]; then
+    sgdisk -n3:0:0   -t3:BF00 $i
+else
+    sgdisk -n3:0:+${INST_PARTSIZE_RPOOL}G -t3:BF00 $i
+fi
+sgdisk -a1 -n5:24K:+1000K -t5:EF02 $i
+done
+
+
+
+
